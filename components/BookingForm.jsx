@@ -1,14 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Listing } from '@/lib/api';
 
-interface BookingFormProps {
-  listing: Listing;
-  onSubmit: (startDate: string, endDate: string) => void;
-}
-
-export default function BookingForm({ listing, onSubmit }: BookingFormProps) {
+export default function BookingForm({ listing, onSubmit }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [error, setError] = useState('');
@@ -24,7 +18,7 @@ export default function BookingForm({ listing, onSubmit }: BookingFormProps) {
     return 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e) {
     e.preventDefault();
     setError('');
 
@@ -45,7 +39,7 @@ export default function BookingForm({ listing, onSubmit }: BookingFormProps) {
   }
 
   const days = calculateDays();
-  const totalPrice = days * listing.price;
+  const totalPrice = days * (listing?.price || 0);
 
   return (
     <form onSubmit={handleSubmit}>

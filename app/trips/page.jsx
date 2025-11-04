@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getMyBookings, getMe, Booking } from '@/lib/api';
+import { getMyBookings, getMe } from '@/lib/api';
 
 export default function TripsPage() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     checkAuth();
     loadBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function checkAuth() {
@@ -35,7 +36,7 @@ export default function TripsPage() {
     }
   }
 
-  function formatDate(dateString: string) {
+  function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',

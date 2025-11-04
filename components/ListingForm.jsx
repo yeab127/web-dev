@@ -1,15 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Listing } from '@/lib/api';
 
-interface ListingFormProps {
-  listing?: Listing | null;
-  onSubmit: (data: any) => void;
-  onCancel?: () => void;
-}
-
-export default function ListingForm({ listing, onSubmit, onCancel }: ListingFormProps) {
+export default function ListingForm({ listing, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -36,16 +29,14 @@ export default function ListingForm({ listing, onSubmit, onCancel }: ListingForm
     }
   }, [listing]);
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) {
+  function handleChange(e) {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e) {
     e.preventDefault();
     onSubmit({
       ...formData,

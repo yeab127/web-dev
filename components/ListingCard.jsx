@@ -1,12 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Listing } from '@/lib/api';
 
-interface ListingCardProps {
-  listing: Listing;
-}
-
-export default function ListingCard({ listing }: ListingCardProps) {
+export default function ListingCard({ listing }) {
   return (
     <Link href={`/listing/${listing.id}`} className="block group">
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">

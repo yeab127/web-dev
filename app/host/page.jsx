@@ -2,20 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getListings, createListing, updateListing, getMe, Listing } from '@/lib/api';
+import { getListings, createListing, updateListing, getMe } from '@/lib/api';
 import ListingForm from '@/components/ListingForm';
 import ListingCard from '@/components/ListingCard';
 
 export default function HostPage() {
-  const [myListings, setMyListings] = useState<Listing[]>([]);
+  const [myListings, setMyListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingListing, setEditingListing] = useState<Listing | null>(null);
+  const [editingListing, setEditingListing] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
     checkAuth();
     loadMyListings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function checkAuth() {
@@ -39,7 +40,7 @@ export default function HostPage() {
     }
   }
 
-  async function handleSubmit(formData: any) {
+  async function handleSubmit(formData) {
     try {
       if (editingListing) {
         await updateListing(editingListing.id, formData);
@@ -49,12 +50,12 @@ export default function HostPage() {
       setShowForm(false);
       setEditingListing(null);
       loadMyListings();
-    } catch (error: any) {
-      alert(error.message || 'Failed to save listing');
+    } catch (error) {
+      alert((error && error.message) || 'Failed to save listing');
     }
   }
 
-  function handleEdit(listing: Listing) {
+  function handleEdit(listing) {
     setEditingListing(listing);
     setShowForm(true);
   }

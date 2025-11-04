@@ -3,40 +3,45 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { getListing, createBooking, Listing, Review } from '@/lib/api';
+import { getListing, createBooking } from '@/lib/api';
 import BookingForm from '@/components/BookingForm';
 
 export default function ListingDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [listing, setListing] = useState<(Listing & { reviews: Review[]; avgRating: number | null }) | null>(null);
+  const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (params.id) {
+    if (params && params.id) {
       loadListing();
     }
-  }, [params.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params && params.id]);
 
   async function loadListing() {
     try {
-      const data = await getListing(params.id as string);
+      const data = await getListing(params.id);
       setListing(data);
-    } catch (error: any) {
-      setError(error.message || 'Failed to load listing');
+    } catch (err) {
+      setError((err && err.message) || 'Failed to load listing');
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleBooking(startDate: string, endDate: string) {
+  async function handleBooking(startDate, endDate) {
+    if (!listing) {
+      alert('Listing not loaded');
+      return;
+    }
     try {
-      await createBooking(listing!.id, startDate, endDate);
+      await createBooking(listing.id, startDate, endDate);
       alert('Booking request created successfully!');
       router.push('/trips');
-    } catch (error: any) {
-      alert(error.message || 'Failed to create booking');
+    } catch (err) {
+      alert((err && err.message) || 'Failed to create booking');
     }
   }
 
@@ -66,12 +71,7 @@ export default function ListingDetailPage() {
 
           {listing.imageUrl && (
             <div className="relative h-96 w-full mb-6 rounded-lg overflow-hidden">
-              <Image
-                src={listing.imageUrl}
-                alt={listing.title}
-                fill
-                className="object-cover"
-              />
+              <Image src={listing.imageUrl} alt={listing.title} fill className="object-cover" />
             </div>
           )}
 

@@ -2,16 +2,17 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getMe, logout, User } from '@/lib/api';
+import { getMe, logout } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function checkAuth() {

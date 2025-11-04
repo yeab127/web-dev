@@ -2,17 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getListings, Listing } from '@/lib/api';
+import { getListings } from '@/lib/api';
 import ListingCard from '@/components/ListingCard';
 
 export default function Home() {
-  const [featuredListings, setFeaturedListings] = useState<Listing[]>([]);
+  const [featuredListings, setFeaturedListings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     loadFeaturedListings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadFeaturedListings() {
@@ -20,15 +21,15 @@ export default function Home() {
       setError(null);
       const listings = await getListings();
       setFeaturedListings(listings.slice(0, 6));
-    } catch (error: any) {
-      console.error('Failed to load listings:', error);
-      setError(error.message || 'Failed to load listings');
+    } catch (err) {
+      console.error('Failed to load listings:', err);
+      setError((err && err.message) || 'Failed to load listings');
     } finally {
       setLoading(false);
     }
   }
 
-  function handleSearch(e: React.FormEvent) {
+  function handleSearch(e) {
     e.preventDefault();
     if (searchQuery.trim()) {
       window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;

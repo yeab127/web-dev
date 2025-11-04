@@ -15,7 +15,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e) {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -23,7 +23,7 @@ export default function AuthPage() {
     setError('');
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -41,8 +41,8 @@ export default function AuthPage() {
       }
       router.push('/');
       router.refresh();
-    } catch (error: any) {
-      setError(error.message || 'An error occurred');
+    } catch (err) {
+      setError((err && err.message) || 'An error occurred');
     } finally {
       setLoading(false);
     }

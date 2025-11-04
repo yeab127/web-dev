@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getListings, Listing } from '@/lib/api';
+import { getListings } from '@/lib/api';
 import ListingCard from '@/components/ListingCard';
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const [listings, setListings] = useState<Listing[]>([]);
+  const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     location: '',
@@ -24,9 +24,10 @@ export default function SearchPage() {
     } else {
       loadListings();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  async function loadListingsWithFilter(location: string) {
+  async function loadListingsWithFilter(location) {
     setLoading(true);
     try {
       const results = await getListings({ location });
@@ -41,7 +42,7 @@ export default function SearchPage() {
   async function loadListings() {
     setLoading(true);
     try {
-      const queryFilters: any = {};
+      const queryFilters = {};
       if (filters.location) queryFilters.location = filters.location;
       if (filters.type) queryFilters.type = filters.type;
       if (filters.minPrice) queryFilters.minPrice = parseFloat(filters.minPrice);
@@ -56,14 +57,14 @@ export default function SearchPage() {
     }
   }
 
-  function handleFilterChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  function handleFilterChange(e) {
     setFilters({
       ...filters,
       [e.target.name]: e.target.value,
     });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e) {
     e.preventDefault();
     loadListings();
   }
